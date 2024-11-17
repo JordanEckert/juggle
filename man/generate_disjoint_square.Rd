@@ -21,7 +21,7 @@ a data frame with two classes.
 \description{
 \code{generate_disjoint_square} generates a data frame with two classes
 from a unit square with varying overlap, but disjointed along the first feature,
-that is \eqn{X_0 \sim U(0,1)^{d-1}} and \eqn{X_1 \sim U(1,2) \times U(\Delta, 1 + \Delta)^{d-1}}.
+that is \eqn{X_0 \sim U(0,1)^{d}} and \eqn{X_1 \sim U(1,2) \times U(\Delta, 1 + \Delta)^{d-1}}.
 }
 \examples{
 library(plotly)
