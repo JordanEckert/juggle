@@ -65,6 +65,7 @@ cv52test <- function(m1,m2)
 #' r_pred <- classify_rwcccd(rwcccd = m_rwcccd, newdata = x_test, e = 1)
 #'
 #' auc(as.numeric(as.factor(p_pred)), as.numeric(as.factor(y_test)))
+#' auc(as.numeric(as.factor(r_pred)), as.numeric(as.factor(y_test)))
 #'
 #' @rdname auc
 #' @export
@@ -126,6 +127,7 @@ auc <- function(predict,actual){
 #' r_pred <- classify_rwcccd(rwcccd = m_rwcccd, newdata = x_test, e = 1)
 #'
 #' f1_score(as.numeric(as.factor(p_pred)), as.numeric(as.factor(y_test)))
+#' f1_score(as.numeric(as.factor(r_pred)), as.numeric(as.factor(y_test)))
 #'
 #'
 #' @author Jordan Eckert
@@ -192,6 +194,7 @@ f1_score <- function(predict, actual) {
 #' r_pred <- classify_rwcccd(rwcccd = m_rwcccd, newdata = x_test, e = 1)
 #'
 #' g_mean(as.numeric(as.factor(p_pred)), as.numeric(as.factor(y_test)))
+#' g_mean(as.numeric(as.factor(r_pred)), as.numeric(as.factor(y_test)))
 #'
 #' @rdname g_mean
 #' @export
@@ -260,6 +263,7 @@ g_mean <- function(predict, actual) {
 #' r_pred <- classify_rwcccd(rwcccd = m_rwcccd, newdata = x_test, e = 1)
 #'
 #' mcc(as.numeric(as.factor(p_pred)), as.numeric(as.factor(y_test)))
+#' mcc(as.numeric(as.factor(r_pred)), as.numeric(as.factor(y_test)))
 #'
 #' @rdname mcc
 #' @export
