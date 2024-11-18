@@ -41,9 +41,6 @@ y_test <- y[-i_train]
 m_pcccd <- pcccd(x = x_train, y = y_train, tau = 1)
 p_pred <- classify_pcccd(pcccd = m_pcccd, newdata = x_test)
 
-m_rwcccd <- rwcccd(x = x_train, y = y_train)
-r_pred <- classify_rwcccd(rwcccd = m_rwcccd, newdata = x_test, e = 1)
-
 f1_score(as.numeric(as.factor(p_pred)), as.numeric(as.factor(y_test)))
 
 

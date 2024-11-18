@@ -22,7 +22,7 @@ a data frame with two classes.
 \code{generate_normal_data} generates a data frame with two classes
 from Normal distributions for each feature with varying overlap,
 that is \eqn{X_0 \sim N(0,1)^{d}} and \eqn{X_1 \sim N(\Delta, 1)^{d}} where
-\eqn{\Delta} is a random direction some specified Mahalanobis distance.
+\eqn{\Delta} is a random direction some specified Mahalanobis distance away.
 }
 \examples{
 library(plotly)

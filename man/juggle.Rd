@@ -47,6 +47,8 @@ Digraph (PCCCD) classification model.
 Resampling framework for PCCCD.
 }
 \examples{
+
+set.seed(123)
 n <- 1000
 x1 <- runif(n, 1, 10)
 x2 <- runif(n, 1, 10)

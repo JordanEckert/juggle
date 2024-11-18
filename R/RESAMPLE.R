@@ -28,6 +28,8 @@
 #' @importFrom  stats runif
 #'
 #' @examples
+#'
+#' set.seed(123)
 #' n <- 1000
 #' x1 <- runif(n, 1, 10)
 #' x2 <- runif(n, 1, 10)
