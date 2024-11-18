@@ -28,16 +28,18 @@ dominate_greedy_matrix <- function(A)
   S <- NULL
   n <- nrow(A)
   covered <- rep(FALSE, n)
+  card_index <- c()
 
   while (!all(covered)) {
-    od <- apply(A, 1, sum)
-    i <- which.max(od)
+    domination_scores <- apply(A, 1, sum)
+    i <- which.max(domination_scores)
     covered[A[i, ]==TRUE] <- TRUE
     S <- c(S, i)
+    card_index <- c(card_index, domination_scores[i])
     A[, covered==TRUE] <- FALSE
   }
 
-  return(list(i_dominant_list = S))
+  return(list(i_dominant_list = S, cardinality = card_index))
 }
 
 #' @title Pure and Proper Class Cover Catch Digraph Classifier
@@ -170,6 +172,7 @@ pcccd <- function(x, y, proportion = 1, tau = .Machine$double.eps) {
   i_dominant_list <- vector(mode = "list", length = k_class)
   x_dominant_list <- vector(mode = "list", length = k_class)
   radii_dominant_list <- vector(mode = "list", length = k_class)
+  cardinality <- vector(mode = "list", length = k_class)
   proportions <- c()
 
   for (i in 1:k_class) {
@@ -185,7 +188,6 @@ pcccd <- function(x, y, proportion = 1, tau = .Machine$double.eps) {
     M <- matrix(as.numeric(M), n_main)
 
     cover <- rep(0, n_main)
-    thresh <- n_main*proportion
 
     m_dominant <- dominate_greedy_matrix(M)
 
@@ -193,6 +195,7 @@ pcccd <- function(x, y, proportion = 1, tau = .Machine$double.eps) {
     x_dominant_list[[i]] <- x_main[m_dominant$i_dominant,,drop = FALSE]
     radii_dominant_list[[i]] <- dist_main2other[m_dominant$i_dominant,]
     proportions[i] <- m_dominant$cover_proportion
+    cardinality[[i]] <- m_dominant$cardinality
   }
 
   results <- list(
@@ -202,6 +205,7 @@ pcccd <- function(x, y, proportion = 1, tau = .Machine$double.eps) {
     class_names = class_names,
     k_class = k_class,
     proportions = proportions,
+    cardinality = cardinality,
     tau = tau
   )
   class(results) <- "pcccd_classifier"
@@ -298,6 +302,85 @@ classify_pcccd <- function(pcccd, newdata, type = "pred") {
     dist_prop[,i] <- Rfast::colMins(prop_x2dom, value = TRUE)
   }
   prob <- t(apply(1/(dist_prop + 1), 1, function(m) m/sum(m)))
+
+  if (type == "prob") {
+    colnames(prob) <- class_names
+    return(prob)
+  }
+  if (type == "pred") {
+    pred <- factor(class_names[max.col(prob)], levels = class_names, labels = class_names)
+    return(pred)
+  }
+}
+
+#' @title  Modified Pure and Proper Class Cover Catch Digraph Prediction Rule
+#'
+#' @description \code{modified_classify_pcccd} makes prediction using \code{pcccd_classifier} object.
+#' We use \eqn{\rho = (\frac{d(x,z)}{r(x)})^{|N(x)|^e} } as a dissimlarity metric where \eqn{e} acts
+#' as a hyperparameter for the effect of cardinality of the neighbors on classification.
+#'
+#' @param pcccd a \code{pcccd_classifier} object
+#' @param newdata newdata as matrix or dataframe.
+#' @param type "pred" or "prob". Default is "pred". "pred" is class estimations,
+#'  "prob" is \eqn{n\times k} matrix of class probabilities.
+#' @param e value between 0 and 1 that determines the effect of the cardinality of the neighbors on classification.
+#' When \code{e = 0}, the prediction is same as original PCCCD, when \code{e = 1}, cardinality is fully incorporated.
+#' Default is 0.
+#'
+#' @return a vector of class predictions (if type is "pred") or a \eqn{n\times p}
+#' matrix of class probabilities (if type is "prob").
+#'
+#' @author Jordan Eckert
+#'
+#' @importFrom proxy dist
+#' @importFrom Rfast colMins
+#'
+#' @examples
+#' n <- 1000
+#' x1 <- runif(n, 1, 10)
+#' x2 <- runif(n, 1, 10)
+#' x <- cbind(x1, x2)
+#' y <- as.factor(ifelse(3 < x1 & x1 < 7 & 3 < x2 & x2 < 7, "A", "B"))
+#'
+#' # testing the performance
+#' i_train <- sample(1:n, round(n*0.8))
+#'
+#' x_train <- x[i_train,]
+#' y_train <- y[i_train]
+#'
+#' x_test <- x[-i_train,]
+#' y_test <- y[-i_train]
+#'
+#' m_pcccd <- pcccd(x = x_train, y = y_train)
+#' pred <- modified_classify_pcccd(pcccd = m_pcccd, newdata = x_test, e = 1)
+#'
+#' # confusion matrix
+#' table(y_test, pred)
+#'
+#' # test accuracy
+#' sum(y_test == pred)/nrow(x_test)
+#'
+#' @rdname modified_classify_pcccd
+#' @export
+
+modified_classify_pcccd <- function(pcccd, newdata, type = "pred", e = 0) {
+  x_dominant_list <- pcccd$x_dominant_list
+  radii_dominant_list <- pcccd$radii_dominant_list
+  class_names <- pcccd$class_names
+  k_class <- pcccd$k_class
+  cardinality <- pcccd$cardinality
+
+  x <- newdata
+  n <- nrow(x)
+
+  dist_prop <- matrix(data = NA, nrow = n, ncol = k_class)
+
+  for (i in 1:k_class) {
+    dist_x2dom <- as.matrix(proxy::dist(x_dominant_list[[i]], x))
+    prop_x2dom <- (dist_x2dom/radii_dominant_list[[i]])^(cardinality[[i]]^e)
+    dist_prop[,i] <- Rfast::colMins(prop_x2dom, value = TRUE)
+  }
+  prob <- 1 - t(apply(dist_prop, 1, function(m) m/sum(m)))
 
   if (type == "prob") {
     colnames(prob) <- class_names
