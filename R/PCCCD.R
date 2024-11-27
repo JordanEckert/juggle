@@ -141,10 +141,25 @@ dominate_greedy_matrix <- function(A)
 #' # test accuracy
 #' sum(y_test == pred)/nrow(x_test)
 #'
+#' # Example 2
+#' data("iris")
+#'
+#' index <- sample(1:nrow(iris), nrow(iris) * 0.7)
+#'
+#' x <- iris[index, 1:4]
+#' y <- iris[index, 5]
+#' test_data <- iris[-index, 1:4]
+#' test_label <- iris[-index, 5]
+#'
+#' model <- pcccd(x, y, tau = .5)
+#' pred2 <- classify_pcccd(pcccd = model, newdata = test_data)
+#'
+#' sum(test_label == pred2)/nrow(test_data)
+#'
 #' @rdname pcccd
 #' @export
 
-pcccd <- function(x, y, proportion = 1, tau = .Machine$double.eps) {
+pcccd <- function(x, y, proportion = 1, tau = 1) {
 
   if (proportion < 0 | proportion > 1) {
     stop("proportion must be in range [0,1]")
@@ -184,7 +199,8 @@ pcccd <- function(x, y, proportion = 1, tau = .Machine$double.eps) {
 
     dist_main2other <- RANN::nn2(data = x_other, query = x_main, k = 1)$nn.dist
     dist_main2main <- Rfast::Dist(x = x_main)
-    M <- dist_main2main < c(tau*dist_main2other)
+
+    M <- dist_main2main < c(dist_main2other)
     M <- matrix(as.numeric(M), n_main)
 
     cover <- rep(0, n_main)
@@ -193,7 +209,7 @@ pcccd <- function(x, y, proportion = 1, tau = .Machine$double.eps) {
 
     i_dominant_list[[i]] <- m_dominant$i_dominant
     x_dominant_list[[i]] <- x_main[m_dominant$i_dominant,,drop = FALSE]
-    radii_dominant_list[[i]] <- dist_main2other[m_dominant$i_dominant,]
+    radii_dominant_list[[i]] <- (1-tau)*which.max(dist_main2main[m_dominant$i_dominant_list, m_dominant$i_dominant_list]) + tau*dist_main2other[m_dominant$i_dominant,]
     proportions[i] <- m_dominant$cover_proportion
     cardinality[[i]] <- m_dominant$cardinality
   }
@@ -289,7 +305,6 @@ classify_pcccd <- function(pcccd, newdata, type = "pred") {
   radii_dominant_list <- pcccd$radii_dominant_list
   class_names <- pcccd$class_names
   k_class <- pcccd$k_class
-  tau <- pcccd$tau
 
   x <- newdata
   n <- nrow(x)
@@ -298,7 +313,7 @@ classify_pcccd <- function(pcccd, newdata, type = "pred") {
 
   for (i in 1:k_class) {
     dist_x2dom <- as.matrix(proxy::dist(x_dominant_list[[i]], x))
-    prop_x2dom <- dist_x2dom/(tau * radii_dominant_list[[i]])
+    prop_x2dom <- dist_x2dom/radii_dominant_list[[i]]
     dist_prop[,i] <- Rfast::colMins(prop_x2dom, value = TRUE)
   }
   prob <- t(apply(1/(dist_prop + 1), 1, function(m) m/sum(m)))
