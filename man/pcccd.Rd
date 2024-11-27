@@ -4,7 +4,7 @@
 \alias{pcccd}
 \title{Pure and Proper Class Cover Catch Digraph Classifier}
 \usage{
-pcccd(x, y, proportion = 1, tau = .Machine$double.eps)
+pcccd(x, y, proportion = 1, tau = 1)
 }
 \arguments{
 \item{x}{feature matrix or dataframe.}
@@ -90,6 +90,21 @@ table(y_test, pred)
 
 # test accuracy
 sum(y_test == pred)/nrow(x_test)
+
+# Example 2
+data("iris")
+
+index <- sample(1:nrow(iris), nrow(iris) * 0.7)
+
+x <- iris[index, 1:4]
+y <- iris[index, 5]
+test_data <- iris[-index, 1:4]
+test_label <- iris[-index, 5]
+
+model <- pcccd(x, y, tau = .5)
+pred2 <- classify_pcccd(pcccd = model, newdata = test_data)
+
+sum(test_label == pred2)/nrow(test_data)
 
 }
 \references{

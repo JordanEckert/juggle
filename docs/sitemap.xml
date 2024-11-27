@@ -1,28 +1,78 @@
-<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
-<url><loc>/404.html</loc></url>
-<url><loc>/authors.html</loc></url>
-<url><loc>/index.html</loc></url>
-<url><loc>/reference/acdc.html</loc></url>
-<url><loc>/reference/acdc_classifier.html</loc></url>
-<url><loc>/reference/auc.html</loc></url>
-<url><loc>/reference/classify_juggle.html</loc></url>
-<url><loc>/reference/classify_pcccd.html</loc></url>
-<url><loc>/reference/classify_rwcccd.html</loc></url>
-<url><loc>/reference/cv52test.html</loc></url>
-<url><loc>/reference/dominate_greedy_matrix.html</loc></url>
-<url><loc>/reference/dominate_stochastic_matrix.html</loc></url>
-<url><loc>/reference/f1_score.html</loc></url>
-<url><loc>/reference/g_mean.html</loc></url>
-<url><loc>/reference/generate_disjoint_square.html</loc></url>
-<url><loc>/reference/generate_normal_data.html</loc></url>
-<url><loc>/reference/generate_unit_square.html</loc></url>
-<url><loc>/reference/index.html</loc></url>
-<url><loc>/reference/juggle.html</loc></url>
-<url><loc>/reference/mcc.html</loc></url>
-<url><loc>/reference/modified_classify_pcccd.html</loc></url>
-<url><loc>/reference/pcccd.html</loc></url>
-<url><loc>/reference/rwcccd.html</loc></url>
-<url><loc>/reference/stochastic_cover_selection.html</loc></url>
-<url><loc>/reference/weighted_pcccd.html</loc></url>
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>/404.html</loc>
+  </url>
+  <url>
+    <loc>/authors.html</loc>
+  </url>
+  <url>
+    <loc>/index.html</loc>
+  </url>
+  <url>
+    <loc>/reference/acdc.html</loc>
+  </url>
+  <url>
+    <loc>/reference/acdc_classifier.html</loc>
+  </url>
+  <url>
+    <loc>/reference/auc.html</loc>
+  </url>
+  <url>
+    <loc>/reference/classify_juggle.html</loc>
+  </url>
+  <url>
+    <loc>/reference/classify_pcccd.html</loc>
+  </url>
+  <url>
+    <loc>/reference/classify_rwcccd.html</loc>
+  </url>
+  <url>
+    <loc>/reference/cv52test.html</loc>
+  </url>
+  <url>
+    <loc>/reference/dominate_greedy_matrix.html</loc>
+  </url>
+  <url>
+    <loc>/reference/dominate_stochastic_matrix.html</loc>
+  </url>
+  <url>
+    <loc>/reference/f1_score.html</loc>
+  </url>
+  <url>
+    <loc>/reference/g_mean.html</loc>
+  </url>
+  <url>
+    <loc>/reference/generate_disjoint_square.html</loc>
+  </url>
+  <url>
+    <loc>/reference/generate_normal_data.html</loc>
+  </url>
+  <url>
+    <loc>/reference/generate_unit_square.html</loc>
+  </url>
+  <url>
+    <loc>/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>/reference/juggle.html</loc>
+  </url>
+  <url>
+    <loc>/reference/mcc.html</loc>
+  </url>
+  <url>
+    <loc>/reference/modified_classify_pcccd.html</loc>
+  </url>
+  <url>
+    <loc>/reference/pcccd.html</loc>
+  </url>
+  <url>
+    <loc>/reference/rwcccd.html</loc>
+  </url>
+  <url>
+    <loc>/reference/stochastic_cover_selection.html</loc>
+  </url>
+  <url>
+    <loc>/reference/weighted_pcccd.html</loc>
+  </url>
 </urlset>
-
