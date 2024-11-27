@@ -198,7 +198,6 @@ weighted_pcccd <- function(x = x, y = y, weights = weights,
     dist_main2main <- Rfast::Dist(x = x_main)
 
     # Incorporate tau
-
     M <- dist_main2main <= c(tau*dist_main2other)
     M <- matrix(as.numeric(M), n_main)
 
@@ -211,7 +210,7 @@ weighted_pcccd <- function(x = x, y = y, weights = weights,
     # Storing class cover information
     i_dominant_list[[i]] <- m_dominant$i_dominant_list
     x_dominant_list[[i]] <- x_main[m_dominant$i_dominant_list,,drop = FALSE]
-    radii_dominant_list[[i]] <- dist_main2other[m_dominant$i_dominant,]
+    radii_dominant_list[[i]] <- tau * dist_main2other[m_dominant$i_dominant,]
     weights[i_main] <- weights_main
 
   }
