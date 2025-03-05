@@ -219,6 +219,7 @@ rwcccd <- function(
     radii         <- rep(NA, n_main)
     T_score       <- rep(NA, n_main)
     ww <- w
+    cover_proportion <- 0
 
     while (Inf) {
       T_scores <- rep(NA, n_main)
@@ -264,6 +265,11 @@ rwcccd <- function(
       radii[i_selected] <- r_selected
       T_score[i_selected] <- T_score_selected
       cover_proportion <- sum(cover_main)/n_main
+
+      if(is.na(cover_proportion)) {
+        cover_proportion <- 0
+        break
+      }
 
       if (cover_proportion >= proportion) {
         break
