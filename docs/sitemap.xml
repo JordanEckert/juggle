@@ -16,6 +16,9 @@
     <loc>/reference/acdc_classifier.html</loc>
   </url>
   <url>
+    <loc>/reference/aggregate_predictions.html</loc>
+  </url>
+  <url>
     <loc>/reference/auc.html</loc>
   </url>
   <url>
@@ -38,6 +41,9 @@
   </url>
   <url>
     <loc>/reference/f1_score.html</loc>
+  </url>
+  <url>
+    <loc>/reference/find_hyperplane_boundary_points.html</loc>
   </url>
   <url>
     <loc>/reference/g_mean.html</loc>
@@ -71,6 +77,9 @@
   </url>
   <url>
     <loc>/reference/stochastic_cover_selection.html</loc>
+  </url>
+  <url>
+    <loc>/reference/svhcccd.html</loc>
   </url>
   <url>
     <loc>/reference/weighted_pcccd.html</loc>
