@@ -5,7 +5,8 @@ library(utils)
 devtools::install_github("JordanEckert/juggle")
 library(juggle)
 
-setwd("~/DataspellProjects/EP3CD - DELETE AFTER SIM STUDY/simulations/simulatedate_experiments")
+# Check correct working directory
+getwd()
 
 # Dataset Generation
 generate_data <- function(n, m, d, delta) {

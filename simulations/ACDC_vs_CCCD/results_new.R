@@ -3,6 +3,42 @@ library(dplyr)
 library(ggplot2)
 library(reshape2)
 
+# Importing all counts_ datasets
+
+path <- "./simulations/simulatedata_experiments/"
+
+# List all files containing "counts" in the filename
+count_files <- list.files(path = path,
+                          pattern = "counts_.*\\.txt$", full.names = TRUE)
+
+for (file in count_files) {
+  df <- read.table(file, header = TRUE)
+  cat("File:", file, "has", ncol(df), "columns\n")
+}
+
+# Read each file and combine them into a single data frame
+count_data <- do.call(rbind, lapply(count_files, read.table, header = TRUE))
+rownames(count_data) <- NULL
+
+# Group variable to account for which ensemble group
+count_data$group <- as.factor(rep(1:5, times = nrow(count_data) / 5))
+
+# Create factors for dim, delta, ir
+count_data$V1 <- as.factor(count_data$V1)
+count_data$V2 <- as.factor(count_data$V2)
+count_data$V3 <- as.factor(count_data$V3)
+
+# Assigning column names
+colnames(count_data) <- c("dim", "delta", "ir", "tau0.0", "tau0.1",
+                          "tau0.2", "tau0.3", "tau0.4", "tau0.5",
+                          "tau0.6", "tau0.7", "tau0.8", "tau0.9", "tau1.0",
+                          "k")
+
+# Write the CSV files
+# write.csv(count_data, file = "count_data_combined.csv", row.names = FALSE)
+# write.csv(results_data, file = "results_data_combined.csv", row.names = FALSE)
+
+
 # Import count_data and results_data first
 
 ### Count
