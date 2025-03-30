@@ -1,7 +1,6 @@
 #' @title Creates region of proposed overlap
 #'
-#' @description \code{find_hyperplane_boundary_points} uses SVM boundary and decision
-#' values to find the points between two parallel hyperplanes.
+#' @description \code{find_hyperplane_boundary_points} uses SVM boundary and decision values to find the points between two parallel hyperplanes.
 #'
 #' @param svm_model SVM model with decision values
 #' @param x_pair training data of the proposed overlap region
@@ -95,7 +94,7 @@ aggregate_predictions <- function(matrix_data) {
 
 #' @title Support Vector Hybrid Class Cover Catch Digraph Classifier
 #'
-#' @description \code{svhcccd} fits a support vector hybrid class cover catch digraph
+#' @description \code{svcccd} fits a support vector hybrid class cover catch digraph
 #' classifier.
 #'
 #' @param x feature matrix or dataframe.
@@ -110,7 +109,7 @@ aggregate_predictions <- function(matrix_data) {
 #' Points inside region are classified using RW-CCCD, if such region exists. If not, classification
 #' proceeds using SVM.
 #'
-#' @return an object of "svhcccd" which includes:
+#' @return an object of "svcccd" which includes:
 #'  \item{final_predictions}{final predictions}
 #'
 #' @author Jordan Eckert
@@ -138,10 +137,10 @@ aggregate_predictions <- function(matrix_data) {
 #' model2 <- svm(x, y, gamma = gamma)
 #' sum(predict(model2, test_data) == test_label) / length(test_label)
 #'
-#' @rdname svhcccd
+#' @rdname svcccd
 #' @export
 
-svhcccd <- function(x, y, test_data, gamma = .01, e = 1){
+svcccd <- function(x, y, test_data, gamma = .01, e = 1){
 
   if (!is.matrix(x) & !is.data.frame(x)) {
     stop("x must be a matrix or data.frame")
