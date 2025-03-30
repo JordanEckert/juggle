@@ -120,6 +120,7 @@ aggregate_predictions <- function(matrix_data) {
 #' @examples
 #' library(e1071)
 #' data("iris")
+#' set.seed(1234)
 #' index <- sample(1:nrow(iris), nrow(iris) * 0.7)
 #'
 #' x <- iris[index, 1:4]
@@ -131,12 +132,8 @@ aggregate_predictions <- function(matrix_data) {
 #' gamma <- .01
 #' e <- 1
 #'
-#' model <- svhcccd(x, y, test_data, gamma, e)
+#' model <- svcccd(x, y, test_data, gamma, e)
 #' sum(model$final_predictions == test_label) / length(test_label)
-#'
-#' model2 <- svm(x, y, gamma = gamma)
-#' sum(predict(model2, test_data) == test_label) / length(test_label)
-#'
 #' @rdname svcccd
 #' @export
 
@@ -170,11 +167,12 @@ svcccd <- function(x, y, test_data, gamma = .01, e = 1){
     # Subset data based on current class pair
     class_pair <- pairwise_combinations[[i]]
     x_pair <- x[y %in% class_pair,]
-    y_pair <- y[y %in% class_pair]
+    y_pair <- droplevels(y[y %in% class_pair])
 
     # Fit SVM on training data
     svm_model <- svm(x = x_pair, y = y_pair,
-                     kernel = "radial", gamma = gamma, decision.values = TRUE)
+                     kernel = "radial",
+                     gamma = gamma, decision.values = TRUE)
 
     # See where SVM misclassifies on training data
     svm_labels <- predict(svm_model, as.matrix(x_pair))
@@ -193,10 +191,20 @@ svcccd <- function(x, y, test_data, gamma = .01, e = 1){
     delta_2 <- max(distances)
 
     # Find points between parallel hyperplanes
-    boundary_points <- find_hyperplane_boundary_points(svm_model, x_pair, y_pair, delta_1, delta_2)
+    boundary_points <- find_hyperplane_boundary_points(svm_model,
+                                                       x_pair, y_pair,
+                                                       delta_1, delta_2)
+
+    # If boundary points are empty, just use SVM
+    if(length(boundary_points$indices) == 0){
+      predictions[,i] <- predict(svm_model, as.matrix(test_data))
+
+      next
+    }
 
     # Fit RW-CCCD on boundary points
-    rw_model <- rwcccd(x = boundary_points$points, y = boundary_points$labels)
+    rw_model <- rwcccd(x = as.matrix(boundary_points$points),
+                       y = boundary_points$labels)
 
     # Location of test_data in the feature space
     test_data_decision_values <- predict(svm_model,
@@ -206,6 +214,13 @@ svcccd <- function(x, y, test_data, gamma = .01, e = 1){
 
     # Find points between parallel hyperplanes
     boundary_points_test <- find_hyperplane_boundary_points(svm_model, test_data, test_data_decision_values, delta_1, delta_2)
+
+    # If no points are in boundary_points_test, use SVM
+    if(length(boundary_points_test$indices) == 0){
+      predictions[,i] <- predict(svm_model, as.matrix(test_data))
+
+      next
+    }
 
     # Predict RW-CCCD on boundary_points_test
     rw_labels <- classify_rwcccd(rw_model, boundary_points_test$points, e = e)

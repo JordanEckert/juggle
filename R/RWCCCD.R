@@ -210,8 +210,7 @@ rwcccd <- function(
 
     w <- switch(method,
                 default = c(rep(1, n_main), rep(-1, n_other)),
-                balanced = c(rep(n_other/n_main, n_main), rep(-1, n_other))
-    )
+                balanced = c(rep(n_other/n_main, n_main), rep(-1, n_other)))
 
     cover_main    <- rep(0, n_main)
     cover_all     <- rep(0, n)
@@ -315,6 +314,7 @@ rwcccd <- function(
 #'  "prob" is \eqn{n\times k} matrix of class probabilities.
 #' @param e 0 or 1. Default is 0. Penalty based on \eqn{T} scores in
 #' \code{rwcccd_classifier} object.
+#' @param svcccd a boolean for if using in SVCCCD context. Default is FALSE.
 #'
 #' @details
 #' Estimations are based on nearest dominant neighbor.
