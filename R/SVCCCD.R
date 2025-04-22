@@ -169,10 +169,19 @@ svcccd <- function(x, y, test_data, gamma = .01, e = 1){
     x_pair <- x[y %in% class_pair,]
     y_pair <- droplevels(y[y %in% class_pair])
 
-    # Fit SVM on training data
+    wt.t <- table(y_pair)
+    wt <- wt.t[y_pair]
+
+    inv.wt.t <- 1/wt.t
+    inv.wt.t <- inv.wt.t/min(inv.wt.t)
+
+    # Cost weighted SVM on training data
     svm_model <- svm(x = x_pair, y = y_pair,
                      kernel = "radial",
-                     gamma = gamma, decision.values = TRUE)
+                     gamma = gamma,
+                     cost = inv.wt.t,
+                     class.weights = wt.t,
+                     decision.values = TRUE)
 
     # See where SVM misclassifies on training data
     svm_labels <- predict(svm_model, as.matrix(x_pair))
@@ -189,6 +198,12 @@ svcccd <- function(x, y, test_data, gamma = .01, e = 1){
     distances <- svm_model$decision.values[mislabels]
     delta_1 <- min(distances)
     delta_2 <- max(distances)
+
+    # Add buffer if degenerate
+    if (abs(delta_2 - delta_1) < 1e-6) {
+      delta_1 <- delta_1 - 1e-3
+      delta_2 <- delta_2 + 1e-3
+    }
 
     # Find points between parallel hyperplanes
     boundary_points <- find_hyperplane_boundary_points(svm_model,
