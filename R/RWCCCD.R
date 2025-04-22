@@ -405,6 +405,7 @@ classify_rwcccd <- function(rwcccd, newdata, type = "pred", e = 0) {
   for (i in 1:k_class) {
     dist_x2dom <- as.matrix(proxy::dist(x_dominant_list[[i]], x))
     prop_x2dom <- (dist_x2dom/radii_dominant_list[[i]])^(T_score_list[[i]]^e)
+    prop_x2dom[is.na(prop_x2dom)] <- 1e5 # Avoid NaN because numeric issue with e
     dist_prop[,i] <- Rfast::colMins(prop_x2dom, value = TRUE)
   }
 
