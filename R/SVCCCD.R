@@ -102,6 +102,7 @@ aggregate_predictions <- function(matrix_data) {
 #' @param test_data Test data frame or matrix without labels
 #' @param gamma Parameter to control Gaussian SVM kernel
 #' @param e Parameter to RW-CCCD
+#' @param cost boolean. If TRUE, uses cost weighted SVM to determine boundary.
 #'
 #' @details
 #' Fits a support vector machine using a Gaussian kernel to find a discrimination hyperplane.
@@ -137,7 +138,7 @@ aggregate_predictions <- function(matrix_data) {
 #' @rdname svcccd
 #' @export
 
-svcccd <- function(x, y, test_data, gamma = .01, e = 1){
+svcccd <- function(x, y, test_data, gamma = .01, e = 1, cost = TRUE){
 
   if (!is.matrix(x) & !is.data.frame(x)) {
     stop("x must be a matrix or data.frame")
@@ -169,19 +170,24 @@ svcccd <- function(x, y, test_data, gamma = .01, e = 1){
     x_pair <- x[y %in% class_pair,]
     y_pair <- droplevels(y[y %in% class_pair])
 
-    wt.t <- table(y_pair)
-    wt <- wt.t[y_pair]
+    if(cost == TRUE){
+      wt.t <- table(y_pair)
 
-    inv.wt.t <- 1/wt.t
-    inv.wt.t <- inv.wt.t/min(inv.wt.t)
+      inv.wt.t <- 1/wt.t
+      inv.wt.t <- inv.wt.t/min(inv.wt.t)
 
-    # Cost weighted SVM on training data
-    svm_model <- svm(x = x_pair, y = y_pair,
-                     kernel = "radial",
-                     gamma = gamma,
-                     cost = inv.wt.t,
-                     class.weights = wt.t,
-                     decision.values = TRUE)
+      svm_model <- svm(x = x_pair, y = y_pair,
+                       kernel = "radial",
+                       gamma = gamma,
+                       cost = inv.wt.t,
+                       class.weights = wt.t,
+                       decision.values = TRUE)
+    } else {
+      svm_model <- svm(x = x_pair, y = y_pair,
+                       kernel = "radial",
+                       gamma = gamma,
+                       decision.values = TRUE)
+    }
 
     # See where SVM misclassifies on training data
     svm_labels <- predict(svm_model, as.matrix(x_pair))
@@ -211,7 +217,14 @@ svcccd <- function(x, y, test_data, gamma = .01, e = 1){
                                                        delta_1, delta_2)
 
     # If boundary points are empty, just use SVM
-    if(length(boundary_points$indices) == 0){
+    if(length(boundary_points$indices) == 0 || length(levels(droplevels(boundary_points$labels))) == 1){
+      predictions[,i] <- predict(svm_model, as.matrix(test_data))
+
+      next
+    }
+
+    # If only one unique observation per class exists, use SVM
+    if(any(table(boundary_points$indices)) == 1){
       predictions[,i] <- predict(svm_model, as.matrix(test_data))
 
       next
