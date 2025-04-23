@@ -314,7 +314,6 @@ rwcccd <- function(
 #'  "prob" is \eqn{n\times k} matrix of class probabilities.
 #' @param e 0 or 1. Default is 0. Penalty based on \eqn{T} scores in
 #' \code{rwcccd_classifier} object.
-#' @param svcccd a boolean for if using in SVCCCD context. Default is FALSE.
 #'
 #' @details
 #' Estimations are based on nearest dominant neighbor.
@@ -404,7 +403,8 @@ classify_rwcccd <- function(rwcccd, newdata, type = "pred", e = 0) {
 
   for (i in 1:k_class) {
     dist_x2dom <- as.matrix(proxy::dist(x_dominant_list[[i]], x))
-    prop_x2dom <- (dist_x2dom/radii_dominant_list[[i]])^(T_score_list[[i]]^e)
+    safe_radii <- pmax(radii_dominant_list[[i]], 1e-8)
+    prop_x2dom <- (dist_x2dom/safe_radii[[i]])^(sign(T_score_list[[i]]) * abs(T_score_list[[i]])^e)
     dist_prop[,i] <- Rfast::colMins(prop_x2dom, value = TRUE)
   }
 
