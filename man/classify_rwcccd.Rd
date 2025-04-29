@@ -16,8 +16,6 @@ classify_rwcccd(rwcccd, newdata, type = "pred", e = 0)
 
 \item{e}{0 or 1. Default is 0. Penalty based on \eqn{T} scores in
 \code{rwcccd_classifier} object.}
-
-\item{svcccd}{a boolean for if using in SVCCCD context. Default is FALSE.}
 }
 \value{
 a vector of class predictions (if type is "pred") or a \eqn{n\times p}

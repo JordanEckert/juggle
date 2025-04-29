@@ -404,7 +404,7 @@ classify_rwcccd <- function(rwcccd, newdata, type = "pred", e = 0) {
   for (i in 1:k_class) {
     dist_x2dom <- as.matrix(proxy::dist(x_dominant_list[[i]], x))
     safe_radii <- pmax(radii_dominant_list[[i]], 1e-8)
-    prop_x2dom <- (dist_x2dom/safe_radii[[i]])^(sign(T_score_list[[i]]) * abs(T_score_list[[i]])^e)
+    prop_x2dom <- (dist_x2dom/safe_radii)^(sign(T_score_list[[i]]) * abs(T_score_list[[i]])^e)
     dist_prop[,i] <- Rfast::colMins(prop_x2dom, value = TRUE)
   }
 

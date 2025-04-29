@@ -90,10 +90,15 @@ juggle <-
     m_list <- list()
     var_list <- list()
     for (i in 1:n_model) {
-      i_sample <- sample(1:n, size = n * prop_sample, replace = replace)
-      i_var <- sample(1:p, size = n_var)
+      classes <- unique(y)
+      guaranteed_points_index <- unlist(lapply(classes, function(cls) {
+        sample(which(y == cls), size = 2)
+      }))
 
-      x_boot <- x[i_sample, i_var, drop = FALSE]
+      i_sample <- sample(1:n, size = (n * prop_sample) - req_points, replace = replace)
+      i_sample <- c(i_sample, guaranteed_points_index)
+
+      x_boot <- x[i_sample, , drop = FALSE]
       y_boot <- y[i_sample]
 
       m_list[[i]] <-

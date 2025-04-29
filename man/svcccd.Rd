@@ -4,7 +4,7 @@
 \alias{svcccd}
 \title{Support Vector Hybrid Class Cover Catch Digraph Classifier}
 \usage{
-svcccd(x, y, test_data, gamma = 0.01, e = 1)
+svcccd(x, y, test_data, gamma = 0.01, e = 1, cost = TRUE)
 }
 \arguments{
 \item{x}{feature matrix or dataframe.}
@@ -16,6 +16,8 @@ svcccd(x, y, test_data, gamma = 0.01, e = 1)
 \item{gamma}{Parameter to control Gaussian SVM kernel}
 
 \item{e}{Parameter to RW-CCCD}
+
+\item{cost}{boolean. If TRUE, uses cost weighted SVM to determine boundary.}
 }
 \value{
 an object of "svcccd" which includes:

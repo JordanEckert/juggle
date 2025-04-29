@@ -46,7 +46,7 @@ classifier.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">svcccd</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, <span class="va">test_data</span>, gamma <span class="op">=</span> <span class="fl">0.01</span>, e <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">svcccd</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, <span class="va">test_data</span>, gamma <span class="op">=</span> <span class="fl">0.01</span>, e <span class="op">=</span> <span class="fl">1</span>, cost <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -71,6 +71,10 @@ classifier.</p>
 
 <dt id="arg-e">e<a class="anchor" aria-label="anchor" href="#arg-e"></a></dt>
 <dd><p>Parameter to RW-CCCD</p></dd>
+
+
+<dt id="arg-cost">cost<a class="anchor" aria-label="anchor" href="#arg-cost"></a></dt>
+<dd><p>boolean. If TRUE, uses cost weighted SVM to determine boundary.</p></dd>
 
 </dl></div>
     <div id="value">
@@ -110,7 +114,7 @@ proceeds using SVM.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">svcccd</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, <span class="va">test_data</span>, <span class="va">gamma</span>, <span class="va">e</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">model</span><span class="op">$</span><span class="va">final_predictions</span> <span class="op">==</span> <span class="va">test_label</span><span class="op">)</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">test_label</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.8888889</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
 </code></pre></div>
     </div>
   </div>

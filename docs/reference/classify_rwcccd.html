@@ -70,10 +70,6 @@ rwcccd_classifier object."><!-- mathjax --><script src="https://cdnjs.cloudflare
 <dd><p>0 or 1. Default is 0. Penalty based on \(T\) scores in
 <code>rwcccd_classifier</code> object.</p></dd>
 
-
-<dt id="arg-svcccd">svcccd<a class="anchor" aria-label="anchor" href="#arg-svcccd"></a></dt>
-<dd><p>a boolean for if using in SVCCCD context. Default is FALSE.</p></dd>
-
 </dl></div>
     <div id="value">
     <h2>Value</h2>
@@ -124,17 +120,15 @@ geometric digraph family. Journal of Machine Learning Research, 17(1),
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">m_rwcccd</span> <span class="op">&lt;-</span> <span class="fu"><a href="rwcccd.html">rwcccd</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x_train</span>, y <span class="op">=</span> <span class="va">y_train</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">pred</span> <span class="op">&lt;-</span> <span class="fu">classify_rwcccd</span><span class="op">(</span>rwcccd <span class="op">=</span> <span class="va">m_rwcccd</span>, newdata <span class="op">=</span> <span class="va">x_test</span>, e <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in safe_radii[[i]]:</span> subscript out of bounds</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># confusion matrix</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">y_test</span>, <span class="va">pred</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       pred</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> y_test   A   B</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      A   0  45</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      B   2 153</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'pred' not found</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># test accuracy</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">y_test</span> <span class="op">==</span> <span class="va">pred</span><span class="op">)</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">x_test</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.765</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'pred' not found</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
