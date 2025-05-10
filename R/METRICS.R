@@ -135,9 +135,9 @@ f1_score <- function(predict, actual) {
   if(length(unique(actual)) > 2)
     stop("you need at most 2 classes")
 
-  TP <- sum(predict == 2 & actual == 2)
-  FP <- sum(predict == 2 & actual == 1)
-  FN <- sum(predict == 1 & actual == 2)
+  TP <- sum(predict == 2 & actual == 2, na.rm = TRUE)
+  FP <- sum(predict == 2 & actual == 1, na.rm = TRUE)
+  FN <- sum(predict == 1 & actual == 2, na.rm = TRUE)
 
   precision <- ifelse((TP + FP) == 0, 0, TP / (TP + FP))
   recall <- ifelse((TP + FN) == 0, 0, TP / (TP + FN))
