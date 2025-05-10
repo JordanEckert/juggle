@@ -195,10 +195,10 @@ g_mean <- function(predict, actual) {
   if(length(unique(actual)) > 2)
     stop("you need at most 2 classes")
 
-  TP <- sum(predict == 2 & actual == 2)
-  TN <- sum(predict == 1 & actual == 1)
-  FP <- sum(predict == 2 & actual == 1)
-  FN <- sum(predict == 1 & actual == 2)
+  TP <- sum(predict == 2 & actual == 2, na.rm = TRUE)
+  TN <- sum(predict == 1 & actual == 1, na.rm = TRUE)
+  FP <- sum(predict == 2 & actual == 1, na.rm = TRUE)
+  FN <- sum(predict == 1 & actual == 2, na.rm = TRUE)
 
   sensitivity <- ifelse((TP + FN) == 0, 0, TP / (TP + FN))
   specificity <- ifelse((TN + FP) == 0, 0, TN / (TN + FP))
@@ -255,25 +255,37 @@ g_mean <- function(predict, actual) {
 mcc <- function(predict, actual) {
 
   # Ensure inputs are vectors
-  if(!is.vector(predict)) predict <- as.vector(predict)
-  if(!is.vector(actual)) actual <- as.vector(actual)
+  if (!is.vector(predict)) predict <- as.vector(predict)
+  if (!is.vector(actual)) actual <- as.vector(actual)
 
   # Check for binary classification
-  if(length(unique(actual)) > 2)
-    stop("you need at most 2 classes")
+  classes <- sort(unique(actual))
+  if (length(classes) != 2) stop("You need exactly 2 classes")
 
-  # Compute components of the confusion matrix
-  TP <- sum(predict == 2 & actual == 2)
-  TN <- sum(predict == 1 & actual == 1)
-  FP <- sum(predict == 2 & actual == 1)
-  FN <- sum(predict == 1 & actual == 2)
+  # Recode labels to 0 (neg) and 1 (pos) using actual classes
+  predict_bin <- as.numeric(predict == classes[2])
+  actual_bin  <- as.numeric(actual == classes[2])
 
-  # Calculate MCC using the formula
+  # Handle NA predictions by treating them as wrong
+  na_idx <- is.na(predict_bin)
+  predict_bin[na_idx] <- 1 - actual_bin[na_idx]  # force to be incorrect
+
+  # Compute confusion matrix components
+  TP <- sum(predict_bin == 1 & actual_bin == 1)
+  TN <- sum(predict_bin == 0 & actual_bin == 0)
+  FP <- sum(predict_bin == 1 & actual_bin == 0)
+  FN <- sum(predict_bin == 0 & actual_bin == 1)
+
+  # Avoid integer overflow
+  TP <- as.double(TP)
+  TN <- as.double(TN)
+  FP <- as.double(FP)
+  FN <- as.double(FN)
+
+  # Calculate MCC
   numerator <- (TP * TN) - (FP * FN)
   denominator <- sqrt((TP + FP) * (TP + FN) * (TN + FP) * (TN + FN))
 
-  # Handle cases where the denominator is zero
   mcc <- ifelse(denominator == 0, 0, numerator / denominator)
-
   return(mcc)
 }
