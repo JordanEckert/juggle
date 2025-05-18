@@ -7,6 +7,7 @@
 <url><loc>/reference/aggregate_predictions.html</loc></url>
 <url><loc>/reference/auc.html</loc></url>
 <url><loc>/reference/classify_juggle.html</loc></url>
+<url><loc>/reference/classify_mpcccd.html</loc></url>
 <url><loc>/reference/classify_pcccd.html</loc></url>
 <url><loc>/reference/classify_rwcccd.html</loc></url>
 <url><loc>/reference/cv52test.html</loc></url>
@@ -22,6 +23,7 @@
 <url><loc>/reference/juggle.html</loc></url>
 <url><loc>/reference/mcc.html</loc></url>
 <url><loc>/reference/modified_classify_pcccd.html</loc></url>
+<url><loc>/reference/mpcccd.html</loc></url>
 <url><loc>/reference/pcccd.html</loc></url>
 <url><loc>/reference/rwcccd.html</loc></url>
 <url><loc>/reference/sample_balanced.html</loc></url>
